@@ -1,7 +1,11 @@
 package com.fido.tro;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBGpServer implements Runnable {
     private Socket clientSocket;
@@ -13,15 +17,29 @@ public class DBGpServer implements Runnable {
     @Override
     public void run() {
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            InputStreamReader isr = new InputStreamReader(clientSocket.getInputStream());
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
 
-            String userInput;
-            while ((userInput = in.readLine()) != null) {
-                System.out.println(userInput);
+            List<String> lines = new ArrayList<>();
+            String line = "";
+            int intChar, charsCount;
+
+            while ((intChar = isr.read()) > 0) {
+                line += (char) intChar;
             }
 
-            in.close();
+            charsCount = Integer.valueOf(line);
+            line = "";
+
+            while ((intChar = isr.read()) > 0) {
+                line += (char) intChar;
+            }
+            if(line.length() == charsCount) {
+                System.out.println(line);
+            } else {
+                System.err.println("broken packet!!!");
+            }
+
             out.close();
         } catch (IOException ioe) {
             System.err.println("Server error: " + ioe.getMessage());

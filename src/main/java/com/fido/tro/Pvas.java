@@ -14,10 +14,7 @@ public class Pvas {
                     System.out.println("Connection opened. (" + new Date() + ")");
                 }
 
-                myServer.run();/*
-
-                Thread thread = new Thread(myServer);
-                thread.start();*/
+                new Thread(myServer).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
