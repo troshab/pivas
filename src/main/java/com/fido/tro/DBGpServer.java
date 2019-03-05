@@ -1,11 +1,16 @@
 package com.fido.tro;
 
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.StringReader;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DBGpServer implements Runnable {
     private Socket clientSocket;
@@ -14,15 +19,11 @@ public class DBGpServer implements Runnable {
         this.clientSocket = acceptedSocket;
     }
 
-    @Override
-    public void run() {
+    private String readPacket() {
+        String line = "";
         try {
             InputStreamReader isr = new InputStreamReader(clientSocket.getInputStream());
-            PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
-
-            List<String> lines = new ArrayList<>();
-            String line = "";
-            int intChar, charsCount;
+                        int intChar, charsCount;
 
             while ((intChar = isr.read()) > 0) {
                 line += (char) intChar;
@@ -37,22 +38,62 @@ public class DBGpServer implements Runnable {
             if(line.length() == charsCount) {
                 System.out.println(line);
             } else {
-                System.err.println("broken packet!!!");
+                System.err.println("Broken came from xdebug.");
             }
 
-            out.close();
+            isr.close();
         } catch (IOException ioe) {
-            System.err.println("Server error: " + ioe.getMessage());
-        } finally {
-            try {
-                clientSocket.close();
+            System.err.println("Error during reading packet: " + ioe.getMessage());
+        }
 
-                if (Config.verbose) {
-                    System.out.println("Connection closed.\n");
-                }
-            } catch (IOException ioe) {
-                System.err.println("Error closing stream: " + ioe.getMessage());
+        return line;
+    }
+
+    private Document parseXML(String answer) {
+        Document document = null;
+        try {
+            DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(answer));
+            document = docBuilder.parse(is);
+            System.out.println("XML parsed");
+        } catch (ParserConfigurationException | IOException | SAXException xmle) {
+            System.err.println("Parse XML error: " + xmle.getMessage());
+        }
+        return document;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Reading xdebug packet");
+        String answer = readPacket();
+
+        if (answer == null) {
+            System.err.println("Error during xdebug packet reading - packet is null");
+            closeSocket();
+        }
+
+        Document document = parseXML(answer);
+
+        if (document == null) {
+            System.err.println("Error during xdebug packet deXMLing - packet is null");
+            closeSocket();
+        }
+
+        /*PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
+            out.close();*/
+        closeSocket();
+    }
+
+    private void closeSocket() {
+        try {
+            clientSocket.close();
+
+            if (Config.VERBOSE) {
+                System.out.println("Connection closed.\n");
             }
+        } catch (IOException ioe) {
+            System.err.println("Error closing stream: " + ioe.getMessage());
         }
     }
 }
