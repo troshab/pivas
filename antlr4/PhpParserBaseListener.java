@@ -1,4 +1,4 @@
-package com.fido.tro.antlr4;// Generated from com.fido.tro.antlr4.PhpParser.g4 by ANTLR 4.7.2
+// Generated from PhpParser.g4 by ANTLR 4.7.2
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -9,12 +9,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
-public class PhpParserTreeListener implements PhpParserListener {
-	private String filepath;
-
-	public PhpParserTreeListener(String filepath) {
-		this.filepath = filepath;
-	}
+public class PhpParserBaseListener implements PhpParserListener {
 	/**
 	 * {@inheritDoc}
 	 *
@@ -104,9 +99,7 @@ public class PhpParserTreeListener implements PhpParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTopStatement(PhpParser.TopStatementContext ctx) {
-		System.out.println(filepath + " - " + ctx.getStart().getLine() + ":" + ctx.getText());
-	}
+	@Override public void enterTopStatement(PhpParser.TopStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

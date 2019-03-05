@@ -50,7 +50,7 @@ public Token nextToken()
             popMode(); // exit from SingleLineComment mode.
         }
         popMode(); // exit from PHP mode.
-
+        
         if (token.getText().equals("</script>"))
         {
             _phpScript = false;

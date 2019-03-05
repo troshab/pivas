@@ -1,4 +1,4 @@
-package com.fido.tro.antlr4;// Generated from com.fido.tro.antlr4.PhpParser.g4 by ANTLR 4.7.2
+// Generated from PhpParser.g4 by ANTLR 4.7.2
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**

@@ -1,10 +1,12 @@
-package com.fido.tro.antlr4;// Generated from com.fido.tro.antlr4.PhpLexer.g4 by ANTLR 4.7.2
+// Generated from PhpLexer.g4 by ANTLR 4.7.2
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class PhpLexer extends Lexer {
@@ -256,7 +258,7 @@ public class PhpLexer extends Lexer {
 	            popMode(); // exit from SingleLineComment mode.
 	        }
 	        popMode(); // exit from PHP mode.
-
+	        
 	        if (token.getText().equals("</script>"))
 	        {
 	            _phpScript = false;
@@ -340,7 +342,7 @@ public class PhpLexer extends Lexer {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "antlr4/com.fido.tro.antlr4.PhpLexer.g4"; }
+	public String getGrammarFileName() { return "PhpLexer.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }

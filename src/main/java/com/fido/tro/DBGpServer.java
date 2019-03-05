@@ -1,5 +1,6 @@
 package com.fido.tro;
 
+import com.fido.tro.vulnerabilities.Vulnerability;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -11,11 +12,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 public class DBGpServer implements Runnable {
     private Socket clientSocket;
 
-    DBGpServer(Socket acceptedSocket) {
+    DBGpServer(Socket acceptedSocket, Map<String, HashMap<Integer, LinkedList<Vulnerability>>> potentialVulnerabilities) {
         this.clientSocket = acceptedSocket;
     }
 

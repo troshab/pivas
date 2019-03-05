@@ -1,22 +1,23 @@
 package com.fido.tro;
 
-import com.fido.tro.antlr4.*;
+import com.fido.tro.ast.PhpLexer;
+import com.fido.tro.ast.PhpParser;
+import com.fido.tro.ast.PivasPhpParserListener;
 import com.fido.tro.maps.PHPFunctionsMap;
 import com.fido.tro.maps.VulnerabilitiesMap;
 import com.fido.tro.vulnerabilities.Vulnerability;
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.PredictionMode;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 class Scanner {
     HashMap<String, HashMap<Integer, LinkedList<Vulnerability>>> scan(PHPFunctionsMap phpFunctionsMap, VulnerabilitiesMap vulnerabilitiesMap) {
@@ -24,20 +25,15 @@ class Scanner {
         List<String> files = findFiles();
         for(String filepath : files) {
             try {
-                AtomicInteger lineCounter = new AtomicInteger(1);
-
                 CharStream in = CharStreams.fromFileName(filepath);
-
                 PhpLexer lexer = new PhpLexer(in);
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
-
                 PhpParser parser = new PhpParser(tokens);
+                PivasPhpParserListener printer = new PivasPhpParserListener(filepath, phpFunctionsMap, vulnerabilitiesMap, vulnerabilityFunctions);
 
-                PhpParser.HtmlElementOrPhpBlockContext tree = parser.htmlElementOrPhpBlock();
                 ParseTreeWalker walker = new ParseTreeWalker();
-                PhpParserTreeListener printer = new PhpParserTreeListener(filepath);
-
-                walker.DEFAULT.walk(printer, tree);
+                System.out.flush();
+                walker.walk(printer, parser.htmlElementOrPhpBlock());
             } catch (IOException e) {
                 e.printStackTrace();
             }
