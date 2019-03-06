@@ -47,4 +47,12 @@ public class PivasPhpParserListener extends PhpParserBaseListener {
     public void exitScriptTextPart(PhpParser.ScriptTextPartContext ctx) {
         System.out.println("exitScriptTextPart: " + ctx.getText());
     }
+
+    public void enterEchoStatement(PhpParser.ScriptTextPartContext ctx) {
+        System.out.println("enterEchoStatement: " + ctx.getText());
+    }
+
+    public void exitEchoStatement(PhpParser.ScriptTextPartContext ctx) {
+        System.out.println("exitEchoStatement: " + ctx.getText());
+    }
 }

@@ -27,7 +27,7 @@ public class DBGpServer implements Runnable {
         String line = "";
         try {
             InputStreamReader isr = new InputStreamReader(clientSocket.getInputStream());
-                        int intChar, charsCount;
+            int intChar, charsCount;
 
             while ((intChar = isr.read()) > 0) {
                 line += (char) intChar;

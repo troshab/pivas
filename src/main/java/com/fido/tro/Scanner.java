@@ -2,6 +2,7 @@ package com.fido.tro;
 
 import com.fido.tro.ast.PhpLexer;
 import com.fido.tro.ast.PhpParser;
+import com.fido.tro.ast.PhpParserListenerAll;
 import com.fido.tro.ast.PivasPhpParserListener;
 import com.fido.tro.maps.PHPFunctionsMap;
 import com.fido.tro.maps.VulnerabilitiesMap;
@@ -29,7 +30,7 @@ class Scanner {
                 PhpLexer lexer = new PhpLexer(in);
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
                 PhpParser parser = new PhpParser(tokens);
-                PivasPhpParserListener printer = new PivasPhpParserListener(filepath, phpFunctionsMap, vulnerabilitiesMap, vulnerabilityFunctions);
+                PhpParserListenerAll printer = new PhpParserListenerAll();//(filepath, phpFunctionsMap, vulnerabilitiesMap, vulnerabilityFunctions);
 
                 ParseTreeWalker walker = new ParseTreeWalker();
                 System.out.flush();
