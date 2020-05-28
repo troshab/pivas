@@ -1,10 +1,9 @@
 package com.fido.tro;
 
-import com.fido.tro.ast.PhpLexer;
-import com.fido.tro.ast.PhpParser;
-import com.fido.tro.ast.PhpParserListenerAll;
-import com.fido.tro.ast.PivasPhpParserListener;
-import com.fido.tro.maps.PHPFunctionsMap;
+import com.fido.tro.ast.GoLexer;
+import com.fido.tro.ast.GoParser;
+import com.fido.tro.ast.GoParserBaseListener;
+import com.fido.tro.maps.GoFunctionsMap;
 import com.fido.tro.maps.VulnerabilitiesMap;
 import com.fido.tro.vulnerabilities.Vulnerability;
 import org.antlr.v4.runtime.CharStream;
@@ -21,20 +20,20 @@ import java.util.LinkedList;
 import java.util.List;
 
 class Scanner {
-    HashMap<String, HashMap<Integer, LinkedList<Vulnerability>>> scan(PHPFunctionsMap phpFunctionsMap, VulnerabilitiesMap vulnerabilitiesMap) {
+    HashMap<String, HashMap<Integer, LinkedList<Vulnerability>>> scan(GoFunctionsMap goFunctionsMap, VulnerabilitiesMap vulnerabilitiesMap) {
         HashMap<String, HashMap<Integer, LinkedList<Vulnerability>>> vulnerabilityFunctions = new HashMap<>();
         List<String> files = findFiles();
         for(String filepath : files) {
             try {
                 CharStream in = CharStreams.fromFileName(filepath);
-                PhpLexer lexer = new PhpLexer(in);
+                GoLexer lexer = new GoLexer(in);
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
-                PhpParser parser = new PhpParser(tokens);
-                PhpParserListenerAll printer = new PhpParserListenerAll();//(filepath, phpFunctionsMap, vulnerabilitiesMap, vulnerabilityFunctions);
+                GoParser parser = new GoParser(tokens);
+                GoParserBaseListener printer = new GoParserBaseListener();//(filepath, phpFunctionsMap, vulnerabilitiesMap, vulnerabilityFunctions);
 
                 ParseTreeWalker walker = new ParseTreeWalker();
                 System.out.flush();
-                walker.walk(printer, parser.htmlElementOrPhpBlock());
+                walker.walk(printer, parser.block());
             } catch (IOException e) {
                 e.printStackTrace();
             }

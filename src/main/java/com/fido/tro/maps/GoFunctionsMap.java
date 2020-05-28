@@ -3,10 +3,10 @@ package com.fido.tro.maps;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PHPFunctionsMap {
+public class GoFunctionsMap {
     Map<String, String> list = new HashMap<>();
 
-    public PHPFunctionsMap() {
-        list.put("echo", "");
+    public GoFunctionsMap() {
+        list.put("Printf", "");
     }
 }

@@ -1,6 +1,6 @@
 package com.fido.tro;
 
-import com.fido.tro.maps.PHPFunctionsMap;
+import com.fido.tro.maps.GoFunctionsMap;
 import com.fido.tro.maps.VulnerabilitiesMap;
 import com.fido.tro.vulnerabilities.Vulnerability;
 
@@ -26,24 +26,10 @@ public class Pivas {
             }
         }));
 
-        PHPFunctionsMap phpFunctionsMap = new PHPFunctionsMap();
+        GoFunctionsMap goFunctionsMap = new GoFunctionsMap();
         VulnerabilitiesMap vulnerabilitiesMap = new VulnerabilitiesMap();
 
         Scanner scanner = new Scanner();
-        Map<String, HashMap<Integer, LinkedList<Vulnerability>>> potentialVulnerabilities = scanner.scan(phpFunctionsMap, vulnerabilitiesMap);
-        try {
-            System.out.println("Running server");
-            serverConnect =  new ServerSocket(Config.PORT);
-            while(true) {
-                DBGpServer myServer = new DBGpServer(serverConnect.accept(), potentialVulnerabilities);
-                if (Config.VERBOSE) {
-                    System.out.println("Connection opened. (" + new Date() + ")");
-                }
-
-                new Thread(myServer).start();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Map<String, HashMap<Integer, LinkedList<Vulnerability>>> potentialVulnerabilities = scanner.scan(goFunctionsMap, vulnerabilitiesMap);
     }
 }
